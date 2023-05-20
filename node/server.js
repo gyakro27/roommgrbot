@@ -4,6 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const expressApp = express();
 const path = require("path");
 const port = process.env.PORT || 88;
+
 const url = "mongodb://127.0.0.1:27017";
 let db, buildings, rooms;
 
@@ -71,7 +72,7 @@ expressApp.listen(port, () => {
 const init = () =>
 console.log("init");
   MongoClient.connect(url, { useNewUrlParser: true }).then((client) => {
-    db = client.db("ktk_foglalas");
+    db = client.db("tbot_bookings");
     buildings=db.collection("buildings");
   })
 
