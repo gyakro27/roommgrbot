@@ -1,11 +1,15 @@
 const mongo = require("mongodb").MongoClient
+require('dotenv').config({path:'../node/bot.env'});
 
-const url = "mongodb://localhost:27017";
+const url = process.env.MONGO_LOCAL ;
 
 let db;
 
 const init = () =>
 console.log("init");
-  MongoClient.connect(url, { useNewUrlParser: true }).then((client) => {
+  mongo.connect(url, { useNewUrlParser: true }).then((client) => {
     db = client.db("ktk_foglalas");
+    buildings=db.collection("buildings");
   })
+
+  module.exports = db;
