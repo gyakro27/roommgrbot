@@ -1,12 +1,10 @@
 const express = require('express');
 const db = require('../db/client');
-const router = express.Router()
-const buildings = db.collection("buildings");
-const Model = require('../models/building');
+const router = express.Router();
+const Model = require('../models/booking');
+const bookings = db.collection("bookings");
 
-var cors = require('cors')
-router.use(cors());
-router.get('/',cors(), async(req, res) => {
+router.get('/', async(req, res) => {
   try{
     const data = await Model.find();
     res.json(data)
@@ -16,20 +14,16 @@ catch(error){
 }
 });
 
-router.get('/:id',cors(), async(req, res) => {
-  try{
-    const data = await Model.findById(req.params.id);
-    res.json(data)
-}
-catch(error){
-    res.status(500).json({message: error.message})
-}
-});
-
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   const body = req.body;
   const data = new Model({
-    name: body.name
+    title: body.title,
+    place:body.place,
+    bookedBy: body.bookedBy,
+    telegram: body.telegram,
+    from: body.from,
+    to: body.to,
+    desc: body.desc
   });
   try {
     const dataToSave = await data.save();
@@ -68,4 +62,5 @@ router.delete('/:id', async (req, res) => {
       res.status(400).json({ message: error.message })
   }
 })
+
 module.exports = router;

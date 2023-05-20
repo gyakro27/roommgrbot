@@ -1,15 +1,16 @@
-const mongo = require("mongodb").MongoClient
+const mongo = require("mongoose");
 require('dotenv').config({path:'../node/bot.env'});
 
 const url = process.env.MONGO_LOCAL ;
+mongo.connect(url);
+let db = mongo.connection;
 
-let db;
+db.on('error', (error) => {
+  console.log(error)
+})
 
-const init = () =>
-console.log("init");
-  mongo.connect(url, { useNewUrlParser: true }).then((client) => {
-    db = client.db("ktk_foglalas");
-    buildings=db.collection("buildings");
-  })
+db.once('connected', () => {
+  console.log('Database Connected');
+})
 
-  module.exports = db;
+ module.exports = db;
