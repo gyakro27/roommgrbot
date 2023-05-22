@@ -35,4 +35,8 @@ const dataSchema = new mongoose.Schema({
     }
 })
 
+dataSchema.query.isOccupied = function(roomId, dateFrom, dateTo) {
+    return this.where({roomId: roomId}).where('from').lte(dateFrom).gte(dateTo).where('to').lte(dateTo).gte(dateFrom)
+}
+
 module.exports = mongoose.model('booking', dataSchema)

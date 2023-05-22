@@ -5,21 +5,26 @@ const Model = require('../models/rooms');
 const buildings = require('../models/building')
 var cors = require('cors')
 router.use(cors());
-router.get('/',cors(), async(req, res) => {
+router.get('/:buildingId?',cors(), async(req, res) => {
   try{
-    const data = await Model.find();
-    res.json(data)
+    if(req.params.buildingId != null){
+        const data = await Model.find().byBuilding(req.params.buildingId);
+        res.json(data)    
+    } else{
+        const data = await Model.find();
+        res.json(data)
+    }
 }
-catch(error){
-    res.status(500).json({message: error.message})
-}
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
 });
 
 router.get('/:id',cors(), async(req, res) => {
   try{
     const data = await Model.findById(req.params.id);
     const building = await buildings.findById(data.buildingId);
-    console.log(building);
+
     data.building = building.name;
     res.json(data)
 }

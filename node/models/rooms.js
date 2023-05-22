@@ -12,7 +12,11 @@ const dataSchema = new mongoose.Schema({
     building:{
         required: false,
         type: String
-    }
+    } 
 })
+
+dataSchema.query.byBuilding = function(id){
+    return this.where({buildingId: id})
+}
 
 module.exports = mongoose.model('room', dataSchema)

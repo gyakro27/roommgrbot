@@ -27,9 +27,16 @@ router.post('/', async (req, res, next) => {
     desc: body.desc
   });
   try {
+    const booking = Model.find().isOccupied(body.roomId, body.from, body.to);
+
+    if(booking == null){
+      
+     
+    } 
     const dataToSave = await data.save();
     res.set('Access-Control-Allow-Origin', '*');
     res.status(200).json(dataToSave)
+    
 }
 catch (error) {
     res.status(400).json({message: error.message})
