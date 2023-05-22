@@ -9,8 +9,12 @@ const dataSchema = new mongoose.Schema({
         required: true,
         type: String
     },
-    place: {
+    roomId: {
         required: true,
+        type: String
+    },
+    room: {
+        required: false,
         type: String
     },
     telegram: {
@@ -24,10 +28,6 @@ const dataSchema = new mongoose.Schema({
     to: {
         required: true,
         type: Date
-    },
-    place: {
-        required: false,
-        type: String
     },
     desc: {
         required: true,

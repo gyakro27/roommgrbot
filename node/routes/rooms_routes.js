@@ -1,10 +1,11 @@
 const express = require('express');
 const db = require('../db/client');
-const router = express.Router();
-const Model = require('../models/booking');
-const bookings = db.collection("bookings");
-
-router.get('/', async(req, res) => {
+const router = express.Router()
+const Model = require('../models/rooms');
+const buildings = require('../models/building')
+var cors = require('cors')
+router.use(cors());
+router.get('/',cors(), async(req, res) => {
   try{
     const data = await Model.find();
     res.json(data)
@@ -14,21 +15,27 @@ catch(error){
 }
 });
 
-router.post('/', async (req, res, next) => {
+router.get('/:id',cors(), async(req, res) => {
+  try{
+    const data = await Model.findById(req.params.id);
+    const building = await buildings.findById(data.buildingId);
+    console.log(building);
+    data.building = building.name;
+    res.json(data)
+}
+catch(error){
+    res.status(500).json({message: error.message})
+}
+});
+
+router.post('/', async (req, res) => {
   const body = req.body;
   const data = new Model({
-    title: body.title,
-    room:body.room,
-    roomId:body.roomId,
-    bookedBy: body.bookedBy,
-    telegram: body.telegram,
-    from: body.from,
-    to: body.to,
-    desc: body.desc
+    name: body.name,
+    buildingId: body.buildingId
   });
   try {
     const dataToSave = await data.save();
-    res.set('Access-Control-Allow-Origin', '*');
     res.status(200).json(dataToSave)
 }
 catch (error) {
@@ -63,5 +70,4 @@ router.delete('/:id', async (req, res) => {
       res.status(400).json({ message: error.message })
   }
 })
-
 module.exports = router;
