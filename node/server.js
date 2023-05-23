@@ -22,27 +22,22 @@ expressApp.use('/rooms', roomsRoutes);
 require('dotenv').config({path:__dirname+'\\bot.env'});
 
 const { Telegraf, Markup } = require('telegraf');
-const { read } = require('fs');
+
 const bot = new Telegraf(process.env.BOT_TOKEN);
 expressApp.use(bot.webhookCallback('/tbot'));
-bot.telegram.setWebhook('https://3bfd-188-142-239-29.ngrok-free.app');
+bot.telegram.setWebhook(process.env.NGROK);
 
 expressApp.use(express.static(path.join(__dirname, "..", "build")));
 expressApp.use(express.static("public"));
 expressApp.use(bodyParser.json());
-expressApp.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // update to match 
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content- Type, Accept");
-  
-  next();
-  });
+
 bot.start(ctx => {
   return ctx.reply('Kattints a gombra, hogy elindítsd az alkalmazást: <b>KTK foglalás</b>', {
     parse_mode: 'HTML',
     ...Markup.inlineKeyboard([
-      Markup.button.webApp('KTK foglalás', 'https://64688844b16cbf7995f304e0--peppy-cupcake-a889e9.netlify.app/')
+      Markup.button.webApp('KTK foglalás', process.env.NETLIFY)
     ])
-  })
+  });
 });
 
 
