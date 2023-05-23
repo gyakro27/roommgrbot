@@ -6,7 +6,7 @@ const bookings = db.collection("bookings");
 
 router.get('/', async(req, res) => {
   try{
-    const data = await Model.find();
+    const data = await Model.find().lean();
     res.json(data)
 }
 catch(error){
@@ -28,14 +28,15 @@ router.post('/', async (req, res, next) => {
   });
   try {
     const booking = Model.find().isOccupied(body.roomId, body.from, body.to);
-
-    if(booking == null){
-      
+    
+    if(booking === null){
+      const dataToSave = await data.save();
+      res.set('Access-Control-Allow-Origin', '*');
+      res.status(200).json(dataToSave)
      
-    } 
-    const dataToSave = await data.save();
-    res.set('Access-Control-Allow-Origin', '*');
-    res.status(200).json(dataToSave)
+    } else{
+      res.status(400).json({message: "Időpont foglalt"})  
+    }
     
 }
 catch (error) {
