@@ -23,7 +23,8 @@ const dataSchema = new mongoose.Schema({
     },
     from: {
         required: true,
-        type: Date
+        type: Date,
+        min: new Date(),
     },
     to: {
         required: true,
